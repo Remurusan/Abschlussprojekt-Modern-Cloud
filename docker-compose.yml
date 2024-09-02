@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend-server
+    container_name: backend
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./backend-server/.env
+    depends_on:
+      - mongo
+
+  frontend:
+    build: ./website
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
+    driver: local
